@@ -5,7 +5,10 @@
       "Bash(npm run:*)",
       "WebFetch(domain:50fb42daa5.execute-api.us-east-1.amazonaws.com)",
       "WebFetch(domain:etwzctydh9.execute-api.us-east-1.amazonaws.com)",
-      "Bash(node -e \"const {generateClient} = require\\('aws-amplify/data'\\); console.log\\('ok'\\)\")"
+      "Bash(node -e \"const {generateClient} = require\\('aws-amplify/data'\\); console.log\\('ok'\\)\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\temp\\\\bcwws-reuse-002\\\\amplify\" -Recurse -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName)",
+      "Bash(find C:\\\\\\\\temp\\\\\\\\bcwws-reuse-002\\\\\\\\amplify -type f -name \"*.ts\" -o -name \"*.graphql\" -o -name \"*.json\")"
     ]
   }
 }

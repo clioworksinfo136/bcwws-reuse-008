@@ -13,19 +13,44 @@ const schema = a.schema({
   }),
   Location: a
     .model({
-      date: a.date().required(), 
-      time: a.time(), 
+      date: a.date().required(),
+      time: a.time(),
       track: a.integer().required(),
-      type: a.string(), 
+      type: a.string(),
       diameter: a.float().required(),
-      length: a.float().required(), 
+      length: a.float().required(),
       lat: a.float().required(),
       lng: a.float().required(),
       username: a.string(),
       description: a.string(),
       photos: a.string().array(),
       comments: a.ref('Comment').array(),
-      joint: a.string()
+      joint: a.string(),
+      dates: a.hasMany('Date', 'locationId'),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+  Date: a
+    .model({
+      date: a.date(),
+      weather: a.string(),
+      hight: a.float(),
+      lowt: a.float(),
+      supervisor: a.string(),
+      labor: a.integer(),
+      observation: a.string(),
+      remark: a.string(),
+      comment: a.string(),
+      equipment: a.string(),
+      locationId: a.id(),
+      location: a.belongsTo('Location', 'locationId'),
+      equipments: a.hasMany('Equipment', 'dateId'),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+  Equipment: a
+    .model({
+      equipment: a.string(),
+      dateId: a.id(),
+      date: a.belongsTo('Date', 'dateId'),
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });
