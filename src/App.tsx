@@ -92,6 +92,9 @@ const trackInfoSelectionSet = [
 ] as const;
 type TrackInfoItem = SelectionSet<Schema['Track']['type'], typeof trackInfoSelectionSet>;
 
+const valveSelectionSet = ['id', 'valve', 'number', 'createdAt', 'updatedAt'] as const;
+type ValveItem = SelectionSet<Schema['Valve']['type'], typeof valveSelectionSet>;
+
 
 const theme: Theme = {
   name: "table-theme",
@@ -228,6 +231,7 @@ function App() {
   });
 
   const [trackInfoList, setTrackInfoList] = useState<TrackInfoItem[]>([]);
+  const [valveList, setValveList] = useState<ValveItem[]>([]);
   const [editingTrackId, setEditingTrackId] = useState<string | null>(null);
   const [editTrackFields, setEditTrackFields] = useState({
     track: "" as number | "", geometry: "line",
@@ -343,6 +347,16 @@ function App() {
     }).subscribe({
       next: (data) => setTrackInfoList([...data.items]),
       error: (err) => console.error('Track observeQuery error:', err),
+    });
+    return () => sub.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const sub = client.models.Valve.observeQuery({
+      selectionSet: [...valveSelectionSet],
+    }).subscribe({
+      next: (data) => setValveList([...data.items]),
+      error: (err) => console.error('Valve observeQuery error:', err),
     });
     return () => sub.unsubscribe();
   }, []);
@@ -1747,6 +1761,41 @@ function App() {
                           </TableRow>
                         );
                       })}
+                    </TableBody>
+                  </Table>
+                </ThemeProvider>
+              </ScrollView>
+            </>)
+          },
+          {
+            label: "Valve Info",
+            value: "5",
+            content: (<>
+              <ScrollView
+                as="div"
+                ariaLabel="Valve Info"
+                backgroundColor="var(--amplify-colors-white)"
+                borderRadius="6px"
+                color="var(--amplify-colors-blue-60)"
+                padding="1rem"
+                height="700px"
+              >
+                <ThemeProvider theme={theme} colorMode="light">
+                  <Table caption="" highlightOnHover={false} variation="striped"
+                    style={{ width: '100%', fontFamily: 'Arial, sans-serif' }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell as="th">Valve</TableCell>
+                        <TableCell as="th">Number</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {[...valveList].sort((a, b) => (a.valve ?? '').localeCompare(b.valve ?? '')).map(item => (
+                        <TableRow key={item.id}>
+                          <TableCell>{item.valve ?? ''}</TableCell>
+                          <TableCell>{item.number ?? ''}</TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </ThemeProvider>
