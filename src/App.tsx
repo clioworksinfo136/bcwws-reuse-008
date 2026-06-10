@@ -1844,7 +1844,7 @@ function App() {
                                 onChange={e => setEditTrackFields(p => ({ ...p, numpoint: e.target.value === "" ? "" : Number(e.target.value) }))} style={{ width: '70px' }} />
                             </TableCell>
                             <TableCell>
-                              <button onClick={() => saveTrackInfo(item.id)} style={{ backgroundColor: 'green', color: 'white', border: 'none', padding: '4px 8px', cursor: 'pointer', marginRight: '4px' }}>Save</button>
+                              <button onClick={() => saveTrackInfo(item.id!)} style={{ backgroundColor: 'green', color: 'white', border: 'none', padding: '4px 8px', cursor: 'pointer', marginRight: '4px' }}>Save</button>
                               <button onClick={() => setEditingTrackId(null)} style={{ border: 'none', padding: '4px 8px', cursor: 'pointer' }}>Cancel</button>
                             </TableCell>
                           </TableRow>
