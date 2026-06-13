@@ -308,8 +308,7 @@ function App() {
 
 
   const options = TRACK_DATA
-    .map(r => ({ value: r.type, label: r.type, geometry: r.geometry }))
-    .sort((a, b) => a.geometry.localeCompare(b.geometry));
+    .map(r => ({ value: r.type, label: `${r.typeid} ${r.type}`, geometry: r.geometry }));
 
   //console.log(AIR_PORTS);
 

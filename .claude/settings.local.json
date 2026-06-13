@@ -28,7 +28,8 @@
       "Bash(aws s3 *)",
       "Bash(git add *)",
       "Bash(git commit -m 'Add point.geojson export for point-geometry tracks on Complete Polygon *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(grep -n \"options.map\\\\|value={type}\\\\|handleSelectChange\\\\|setType\\\\|type: type\\\\|type,\" src/App.tsx)"
     ]
   }
 }
