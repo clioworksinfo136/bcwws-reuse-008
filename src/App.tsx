@@ -989,16 +989,31 @@ function App() {
     const LAT_FT = 364000;
     const sorted = [...trackInfoList].sort((a, b) => (a.track ?? 0) - (b.track ?? 0));
 
-    // Pass 0: populate unitprice and geometry from trackData.ts by matching Location type → TRACK_DATA
+    // Pass 0: populate unitprice and geometry from trackData.ts by matching Location type → TRACK_DATA.
+    // Drive off the track numbers actually present in Location and upsert the Track row, so newly
+    // added tracks (whose Track record may not be in trackInfoList yet) are also populated.
     flushSync(() => setComputeStatus(["Pass 0: Populating unit price, total price, geometry, unit from trackData..."]));
-    for (const trackRec of sorted) {
-      const pts = location.filter(l => l.track === trackRec.track);
+    const { data: existingTracks } = await client.models.Track.list();
+    const trackIdByNumber: Record<number, string> = {};
+    for (const t of existingTracks ?? []) {
+      if (t.track != null) trackIdByNumber[t.track] = t.id;
+    }
+    const locationTrackNumbers = [...new Set(location.map(l => l.track).filter((t): t is number => t != null))]
+      .sort((a, b) => a - b);
+    for (const trackNo of locationTrackNumbers) {
+      const pts = location.filter(l => l.track === trackNo);
       const firstType = pts.find(p => p.type)?.type;
       const match = firstType ? TRACK_DATA.find(r => r.type === firstType) : undefined;
+      let trackId = trackIdByNumber[trackNo];
+      if (!trackId) {
+        const { data: created } = await client.models.Track.create({ track: trackNo, cost: true });
+        if (!created) continue;
+        trackId = created.id;
+        trackIdByNumber[trackNo] = trackId;
+      }
       await client.models.Track.update({
-        id: trackRec.id,
+        id: trackId,
         trip: true,
-        ...(trackRec.cost == null && { cost: true }),
         ...(match?.unitprice != null && { unitprice: match.unitprice }),
         ...(match?.totalprice != null && { totalprice: match.totalprice }),
         ...(match?.geometry  != null && { geometry:  match.geometry  }),

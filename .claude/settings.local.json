@@ -29,7 +29,9 @@
       "Bash(git add *)",
       "Bash(git commit -m 'Add point.geojson export for point-geometry tracks on Complete Polygon *)",
       "Bash(git push *)",
-      "Bash(grep -n \"options.map\\\\|value={type}\\\\|handleSelectChange\\\\|setType\\\\|type: type\\\\|type,\" src/App.tsx)"
+      "Bash(grep -n \"options.map\\\\|value={type}\\\\|handleSelectChange\\\\|setType\\\\|type: type\\\\|type,\" src/App.tsx)",
+      "Bash(curl -s -X POST https://euhxsprquzc6zk2rrrlgy3qdky.appsync-api.us-east-1.amazonaws.com/graphql -H 'Content-Type: application/json' -H 'x-api-key: da2-spnpofbvbvcxdebfm23rltvk4q' -d '{\"query\":\"query { __type\\(name: \\\\\"Track\\\\\"\\) { fields { name } } }\"}')",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); fields=[f['name'] for f in d['data']['__type']['fields']]; print\\('totalprice present:', 'totalprice' in fields\\); print\\('typeid present:', 'typeid' in fields\\); print\\(sorted\\(fields\\)\\)\")"
     ]
   }
 }
